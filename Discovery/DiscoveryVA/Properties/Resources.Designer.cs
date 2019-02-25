@@ -63,6 +63,16 @@ namespace DiscoveryVA.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap disco1 {
+            get {
+                object obj = ResourceManager.GetObject("disco1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap discovery_icon {
             get {
                 object obj = ResourceManager.GetObject("discovery_icon", resourceCulture);
@@ -83,9 +93,9 @@ namespace DiscoveryVA.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap discovery_icon_fechar1 {
+        internal static System.Drawing.Bitmap support {
             get {
-                object obj = ResourceManager.GetObject("discovery_icon_fechar1", resourceCulture);
+                object obj = ResourceManager.GetObject("support", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

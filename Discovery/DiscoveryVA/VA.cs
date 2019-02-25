@@ -31,7 +31,10 @@ namespace DiscoveryVA
             InitializeComponent();
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - 120, Screen.PrimaryScreen.Bounds.Height - 125);
             VaDialog = new VADialog();
+
         }
+
+
 
         private void btnVA_Click(object sender, EventArgs e)
         {
@@ -44,7 +47,7 @@ namespace DiscoveryVA
             }
             else
             {
-                btnVA.Image = Properties.Resources.discovery_icon;
+              btnVA.Image = Properties.Resources.disco1;
                 IsVA = true;
                 VaDialog.Hide();
             }

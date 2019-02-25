@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,6 +20,8 @@ namespace DiscoveryAppSample
         List<KeyValuePair<int, string>> _ofertas;
         List<KeyValuePair<int, string>> _linhasProdutos;
         bool _isVA = true;
+
+        HubConnection _connection;
 
         #endregion
 
@@ -35,6 +39,12 @@ namespace DiscoveryAppSample
         {
             InitializeComponent();
             Inicializar();
+            Go();
+        }
+
+        private void EnviarAcao(string acao)
+        {
+
         }
 
         private void Inicializar()
@@ -85,14 +95,84 @@ namespace DiscoveryAppSample
             cboLinha.DataSource = LinhasProdutos;
         }
 
-        private void rdbFisica_CheckedChanged(object sender, EventArgs e)
+        private async void rdbFisica_CheckedChanged(object sender, EventArgs e)
         {
+            if (rdbFisica.Checked)
+            {
+                #region snippet_ErrorHandling
+                try
+                {
+                    #region snippet_InvokeAsync
+                    await _connection.InvokeAsync("SendAction", "Física", 1);
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            #endregion
+        }
+
+        async static Task GetAnswer(string question)
+        {
+            string endpoint_host = "https://discoveryqna.azurewebsites.net/qnamaker";
+            //var uri = endpoint_host + endpointService + baseRoute + "/" + kbid + "/generateAnswer";
+            var uri = endpoint_host + "/knowledgebases/3411861a-c73c-49e5-9d2e-9d50e68c1be4/generateAnswer";
+
+            using (var client = new HttpClient())
+            using (var request = new HttpRequestMessage())
+            {
+                request.Method = HttpMethod.Post;
+                request.RequestUri = new Uri(uri);
+                request.Content = new StringContent("{question:'" + question + "'}", Encoding.UTF8, "application/json");
+
+                // NOTE: The value of the header contains the string/text 'EndpointKey ' with the trailing space
+                request.Headers.Add("Authorization", "EndpointKey " + "3a227369-2646-47ff-9af2-98ab8eae446c");
+
+                var response = await client.SendAsync(request);
+                var responseBody = await response.Content.ReadAsStringAsync();
+                //Console.WriteLine(PrettyPrint(responseBody));
+
+            }
+
 
         }
 
-        private void rdbJuridica_CheckedChanged(object sender, EventArgs e)
+        private async void Go()
         {
+            _connection = new HubConnectionBuilder()
+              .WithUrl("http://localhost:60164/DiscoveryHub")
+              .Build();
 
+            #region snippet_ClosedRestart
+            _connection.Closed += async (error) =>
+            {
+                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await _connection.StartAsync();
+            };
+            #endregion
+
+            await _connection.StartAsync();
+        }
+
+        private async void rdbJuridica_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdbJuridica.Checked)
+            {
+                #region snippet_ErrorHandling
+                try
+                {
+                    #region snippet_InvokeAsync
+                    await _connection.InvokeAsync("SendAction", "Jurídica", 2);
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+
+                }
+                #endregion
+            }
         }
 
         private void CarregarOfertas(int idProduto)
@@ -118,10 +198,14 @@ namespace DiscoveryAppSample
             cboProdutos.DataSource = produtos;
         }
 
-        private void cboProdutos_SelectedIndexChanged(object sender, EventArgs e)
+        private async void cboProdutos_SelectedIndexChanged(object sender, EventArgs e)
         {
             int id = Convert.ToInt32(cboProdutos.SelectedValue);
             CarregarOfertas(id);
+            if (id == 14)
+            {
+                await _connection.InvokeAsync("SendAction", "Prépago", 2);
+            }
         }
     }
 }

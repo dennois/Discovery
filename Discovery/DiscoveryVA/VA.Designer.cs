@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VA));
             this.btnVA = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -38,7 +39,7 @@
             this.btnVA.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btnVA.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btnVA.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVA.Image = global::DiscoveryVA.Properties.Resources.discovery_icon;
+            this.btnVA.Image = ((System.Drawing.Image)(resources.GetObject("btnVA.Image")));
             this.btnVA.Location = new System.Drawing.Point(0, 0);
             this.btnVA.Name = "btnVA";
             this.btnVA.Size = new System.Drawing.Size(90, 90);
